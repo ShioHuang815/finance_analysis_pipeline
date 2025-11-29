@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: dim_stocks
+    description: "Stock dimension table with company information"
+    columns:
+      - name: symbol
+        description: "Stock ticker symbol - Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: company_name
+        description: "Company name"
+      - name: sector
+        description: "Business sector"
+      - name: industry
+        description: "Industry classification"
+      - name: market_cap
+        description: "Market capitalization in USD"
+
+  - name: fact_daily_metrics
+    description: "Daily stock metrics combined with benchmark data"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - date
+    columns:
+      - name: symbol
+        description: "Stock ticker symbol"
+        tests:
+          - not_null
+      - name: date
+        description: "Trading date"
+        tests:
+          - not_null
+      - name: close
+        description: "Closing price"
+        tests:
+          - not_null
+      - name: daily_return
+        description: "Daily return (close-to-close)"
+      - name: alpha_vs_sp500
+        description: "Excess return vs S&P 500"
+      - name: market_cap_category
+        description: "Market cap classification (Mega/Large/Mid/Small/Micro Cap)"

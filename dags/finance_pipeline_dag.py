@@ -1,10 +1,11 @@
 """
 Finance Analysis Pipeline - Airflow DAG
-Orchestrates extraction from Yahoo Finance and loading to Snowflake.
+Orchestrates extraction from Yahoo Finance, loading to Snowflake, and dbt transformations.
 """
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 import yaml
 import sys
@@ -55,7 +56,7 @@ def extract_and_load_prices(**context):
     logger.info(f"Extracted {len(df)} price records")
     
     # Load to Snowflake
-    loader = SnowflakeLoader()
+    loader = SnowflakeLoader(profiles_path='/usr/local/airflow/include/finance_analysis_pipeline/profiles.yml')
     try:
         result = loader.load_to_raw(
             df=df,
@@ -92,7 +93,7 @@ def extract_and_load_company_info(**context):
     logger.info(f"Extracted {len(df)} company records")
     
     # Load to Snowflake
-    loader = SnowflakeLoader()
+    loader = SnowflakeLoader(profiles_path='/usr/local/airflow/include/finance_analysis_pipeline/profiles.yml')
     try:
         result = loader.load_to_raw(
             df=df,
@@ -122,7 +123,7 @@ def extract_and_load_benchmarks(**context):
     logger.info(f"Extracted {len(df)} benchmark records")
     
     # Load to Snowflake
-    loader = SnowflakeLoader()
+    loader = SnowflakeLoader(profiles_path='/usr/local/airflow/include/finance_analysis_pipeline/profiles.yml')
     try:
         result = loader.load_to_raw(
             df=df,
@@ -147,7 +148,7 @@ def verify_data_quality(**context):
     """Verify data was loaded successfully."""
     logger.info("Starting data quality verification")
     
-    loader = SnowflakeLoader()
+    loader = SnowflakeLoader(profiles_path='/usr/local/airflow/include/finance_analysis_pipeline/profiles.yml')
     try:
         # Check row counts
         checks = [
@@ -199,7 +200,7 @@ with DAG(
     dag_id='finance_pipeline_dag',
     default_args=default_args,
     description='Extract Yahoo Finance data and load to Snowflake',
-    schedule_interval='0 2 * * 1-5',  # 2 AM on weekdays
+    schedule='0 2 * * 1-5',  # 2 AM on weekdays
     start_date=datetime(2024, 1, 1),
     catchup=False,
     tags=['finance', 'yahoo', 'snowflake', 'etl'],
@@ -212,31 +213,37 @@ with DAG(
     extract_prices = PythonOperator(
         task_id='extract_yahoo_prices',
         python_callable=extract_and_load_prices,
-        provide_context=True,
     )
     
     extract_company = PythonOperator(
         task_id='extract_yahoo_company_info',
         python_callable=extract_and_load_company_info,
-        provide_context=True,
     )
     
     extract_benchmarks = PythonOperator(
         task_id='extract_yahoo_benchmark_series',
         python_callable=extract_and_load_benchmarks,
-        provide_context=True,
     )
     
     # Verification task
     verify = PythonOperator(
         task_id='verify_data_quality',
         python_callable=verify_data_quality,
-        provide_context=True,
+    )
+    
+    # dbt transformation task
+    transform_dbt = BashOperator(
+        task_id='transform_dbt',
+        bash_command="""
+        cd /usr/local/airflow/dbt_finance && \
+        dbt run --profiles-dir /usr/local/airflow/include/finance_analysis_pipeline && \
+        dbt test --profiles-dir /usr/local/airflow/include/finance_analysis_pipeline
+        """,
     )
     
     # End marker
     end = EmptyOperator(task_id='end')
     
     # Define task dependencies
-    # Start -> all extracts in parallel -> verify -> end
-    start >> [extract_prices, extract_company, extract_benchmarks] >> verify >> end
+    # Start -> all extracts in parallel -> verify -> dbt transform -> end
+    start >> [extract_prices, extract_company, extract_benchmarks] >> verify >> transform_dbt >> end

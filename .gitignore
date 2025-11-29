@@ -1,6 +1,7 @@
 .git
 .env
 .DS_Store
+profiles.yml
 __pycache__/
 astro
 .venv

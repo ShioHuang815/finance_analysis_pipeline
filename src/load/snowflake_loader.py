@@ -19,7 +19,7 @@ logger = setup_logger(__name__)
 class SnowflakeLoader:
     """Handles loading data to Snowflake and managing metadata."""
     
-    def __init__(self, profiles_path: str = "/usr/local/airflow/include/project_name/profiles.yml"):
+    def __init__(self, profiles_path: str = "/usr/local/airflow/include/finance_analysis_pipeline/profiles.yml"):
         """
         Initialize Snowflake loader.
         

@@ -9,7 +9,7 @@ from typing import Dict, Any
 
 
 def read_profiles(
-    profiles_path: str = "/usr/local/airflow/include/project_name/profiles.yml",
+    profiles_path: str = "/usr/local/airflow/include/finance_analysis_pipeline/profiles.yml",
     profile_name: str = "finance_analysis_pipeline",
     target: str = "dev"
 ) -> Dict[str, Any]:
@@ -54,7 +54,7 @@ def read_profiles(
 
 
 def get_snowflake_connection_params(
-    profiles_path: str = "/usr/local/airflow/include/project_name/profiles.yml",
+    profiles_path: str = "/usr/local/airflow/include/finance_analysis_pipeline/profiles.yml",
     profile_name: str = "finance_analysis_pipeline"
 ) -> Dict[str, Any]:
     """

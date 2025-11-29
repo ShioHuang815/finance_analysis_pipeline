@@ -11,6 +11,10 @@ cryptography>=41.0.0
 # Configuration
 PyYAML>=6.0.1
 
-# dbt (for transformations - to be added later)
-# dbt-core>=1.7.0
-# dbt-snowflake>=1.7.0
+# dbt transformations (already installed locally, needed in Airflow container)
+dbt-core>=1.7.0
+dbt-snowflake>=1.7.0
+
+# Streamlit dashboard (for local use)
+streamlit>=1.29.0
+plotly>=5.18.0
