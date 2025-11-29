@@ -1,0 +1,71 @@
+.git
+.env
+.DS_Store
+__pycache__/
+astro
+.venv
+airflow-webserver.pid
+webserver_config.py
+airflow.cfg
+airflow.db
+
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+ENV/
+env/
+
+# Airflow/Astronomer
+logs/
+standalone_admin_password.txt
+.astro/
+.dockerignore
+airflow_settings.yaml
+
+# Secrets - DO NOT COMMIT
+include/rsa_key.pem
+*.pem
+*.key
+*.p8
+*credentials*
+*secrets*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# dbt
+dbt_finance/logs/
+dbt_finance/target/
+dbt_finance/dbt_packages/
+
+# Data files
+*.csv
+*.parquet
+*.json.gz
+data/
+
+# OS
+Thumbs.db
+.DS_Store

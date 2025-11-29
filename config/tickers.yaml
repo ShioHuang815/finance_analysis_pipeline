@@ -1,0 +1,32 @@
+# Finance Analysis Pipeline - Ticker Configuration
+# ~20 stock tickers for the universe
+
+stocks:
+  - AAPL
+  - MSFT
+  - GOOGL
+  - AMZN
+  - TSLA
+  - META
+  - NVDA
+  - JPM
+  - BAC
+  - WFC
+  - JNJ
+  - PFE
+  - UNH
+  - XOM
+  - CVX
+  - WMT
+  - HD
+  - DIS
+  - NFLX
+  - PYPL
+
+# Benchmark and macro series (Yahoo tickers)
+benchmarks:
+  - ^GSPC   # S&P 500
+  - ^VIX    # Volatility Index
+  - ^TNX    # 10-Year Treasury Yield
+  - XLK     # Technology Sector ETF
+  - XLF     # Financials Sector ETF

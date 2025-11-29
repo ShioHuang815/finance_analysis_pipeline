@@ -1,0 +1,16 @@
+# Astro Runtime includes the following pre-installed providers packages: https://www.astronomer.io/docs/astro/runtime-image-architecture#provider-packages
+
+# Data extraction
+yfinance>=0.2.32
+pandas>=2.0.0
+
+# Snowflake connectivity
+snowflake-connector-python[pandas]>=3.5.0
+cryptography>=41.0.0
+
+# Configuration
+PyYAML>=6.0.1
+
+# dbt (for transformations - to be added later)
+# dbt-core>=1.7.0
+# dbt-snowflake>=1.7.0

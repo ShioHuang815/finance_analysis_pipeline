@@ -1,0 +1,13 @@
+finance_analysis_pipeline:
+  outputs:
+    dev:
+      account: azb79167
+      database: MLDS430
+      private_key_path: /usr/local/airflow/include/rsa_key.pem
+      role: TRAINING_ROLE
+      schema: COBRA
+      threads: 1
+      type: snowflake
+      user: COBRA
+      warehouse: TRAINING_WH
+  target: dev
