@@ -1,5 +1,6 @@
 .git
 .env
+*.mp4
 .DS_Store
 profiles.yml
 __pycache__/
